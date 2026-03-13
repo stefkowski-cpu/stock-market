@@ -876,6 +876,28 @@ body {
   color: var(--accent-primary);
 }
 
+.news-card.portfolio-relevant {
+  border-left-color: var(--accent-primary);
+  border-left-width: 3px;
+  border-left-style: solid;
+}
+
+.news-card.portfolio-relevant.read {
+  opacity: 0.85;
+}
+
+.news-portfolio-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--accent-primary);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 .news-tag-clickable {
   cursor: pointer;
   transition: transform 0.1s, opacity 0.15s;

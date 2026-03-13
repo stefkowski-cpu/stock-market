@@ -11,8 +11,13 @@ const NewsView: React.FC = () => {
     setActiveTab,
     setMarketFilter,
     setMarketSort,
+    portfolio,
   } = useGameStore();
   const sortedNews = [...news].reverse();
+  const portfolioIds = new Set(portfolio.map((p) => p.companyId));
+
+  const isPortfolioRelevant = (affectedCompanies: string[]) =>
+    affectedCompanies.some((id) => portfolioIds.has(id));
 
   const getCategoryLabel = (category: string) => {
     switch (category) {
@@ -65,11 +70,14 @@ const NewsView: React.FC = () => {
         {sortedNews.map((item) => (
           <div
             key={item.id}
-            className={`news-card ${item.read ? 'read' : 'unread'}`}
+            className={`news-card ${item.read ? 'read' : 'unread'} ${isPortfolioRelevant(item.affectedCompanies) ? 'portfolio-relevant' : ''}`}
             onClick={() => markNewsRead(item.id)}
           >
             <div className="news-header">
               <div className="news-header-left">
+                {isPortfolioRelevant(item.affectedCompanies) && (
+                  <span className="news-portfolio-badge">Depot</span>
+                )}
                 {item.dayNumber != null && (
                   <span className="news-day">Tag {item.dayNumber}</span>
                 )}
