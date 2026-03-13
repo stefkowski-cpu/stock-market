@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { xpForNextLevel, xpForLevel } from '../engine/simulation';
+import { ThemeMode } from '../types';
 
 const ProfileView: React.FC = () => {
   const {
@@ -12,8 +13,10 @@ const ProfileView: React.FC = () => {
     transactions,
     portfolio,
     cash,
+    theme,
     getTotalValue,
     resetGame,
+    setTheme,
   } = useGameStore();
 
   const totalValue = getTotalValue();
@@ -39,7 +42,7 @@ const ProfileView: React.FC = () => {
   };
 
   const handleReset = () => {
-    if (window.confirm('Spiel wirklich zurücksetzen? Alle Fortschritte gehen verloren!')) {
+    if (window.confirm('Spiel wirklich zurücksetzen? Alle Fortschritte gehen verloren! Das Spiel startet bei Tag 1 mit 50.000€ Startkapital.')) {
       resetGame();
     }
   };
@@ -86,6 +89,39 @@ const ProfileView: React.FC = () => {
         </div>
       </div>
 
+      <h3 className="section-title">Einstellungen</h3>
+      <div className="settings-section">
+        <div className="setting-item">
+          <div className="setting-label">
+            <span className="setting-name">Darstellung</span>
+            <span className="setting-desc">Wähle zwischen hellem und dunklem Design</span>
+          </div>
+          <div className="theme-toggle">
+            <button
+              className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+              onClick={() => setTheme('dark')}
+            >
+              Dunkel
+            </button>
+            <button
+              className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => setTheme('light')}
+            >
+              Hell
+            </button>
+          </div>
+        </div>
+        <div className="setting-item">
+          <div className="setting-label">
+            <span className="setting-name">Spiel zurücksetzen</span>
+            <span className="setting-desc">Startet das Spiel bei Tag 1 neu (50.000€ Startkapital)</span>
+          </div>
+          <button className="reset-btn" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
+      </div>
+
       <h3 className="section-title">
         Erfolge ({unlockedCount}/{totalAchievements})
       </h3>
@@ -102,12 +138,6 @@ const ProfileView: React.FC = () => {
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="profile-actions">
-        <button className="reset-btn" onClick={handleReset}>
-          Spiel zurücksetzen
-        </button>
       </div>
     </div>
   );

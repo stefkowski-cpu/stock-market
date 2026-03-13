@@ -111,9 +111,12 @@ export interface GameState {
   totalProfitLoss: number;
   dayIntervalMs: number; // milliseconds per game day (5000 = 5s, up to 3600000 = 1h)
   paused: boolean;
+  theme: ThemeMode;
   lastTickTime: number;
   marketOpen: boolean;
   marketSentiment: number; // -1 to 1
 }
 
 export type Tab = 'market' | 'portfolio' | 'news' | 'stats' | 'profile';
+
+export type ThemeMode = 'dark' | 'light';

@@ -6,6 +6,7 @@ import {
   PortfolioItem,
   Transaction,
   Tab,
+  ThemeMode,
   StockPrice,
   NewsItem,
   Achievement,
@@ -77,6 +78,7 @@ interface GameStore extends GameState {
   setDayInterval: (ms: number) => void;
   setPaused: (paused: boolean) => void;
   togglePaused: () => void;
+  setTheme: (theme: ThemeMode) => void;
   clearNewAchievement: () => void;
   resetGame: () => void;
   getPortfolioValue: () => number;
@@ -102,6 +104,7 @@ export const useGameStore = create<GameStore>()(
       totalProfitLoss: 0,
       dayIntervalMs: 5000,
       paused: false,
+      theme: 'dark' as ThemeMode,
       lastTickTime: Date.now(),
       marketOpen: true,
       marketSentiment: 0,
@@ -120,6 +123,7 @@ export const useGameStore = create<GameStore>()(
       setDayInterval: (ms) => set({ dayIntervalMs: ms }),
       setPaused: (paused) => set({ paused }),
       togglePaused: () => set((state) => ({ paused: !state.paused })),
+      setTheme: (theme) => set({ theme }),
 
       executeTrade: (companyId, shares, type) => {
         const state = get();
@@ -266,6 +270,7 @@ export const useGameStore = create<GameStore>()(
       },
 
       resetGame: () => {
+        const currentTheme = get().theme;
         set({
           cash: STARTING_CASH,
           portfolio: [],
@@ -280,6 +285,7 @@ export const useGameStore = create<GameStore>()(
           totalProfitLoss: 0,
           dayIntervalMs: 5000,
           paused: false,
+          theme: currentTheme,
           lastTickTime: Date.now(),
           marketOpen: true,
           marketSentiment: 0,

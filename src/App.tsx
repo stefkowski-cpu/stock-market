@@ -12,7 +12,7 @@ import TradeModal from './components/TradeModal';
 import AchievementPopup from './components/AchievementPopup';
 
 function App() {
-  const { activeTab, dayIntervalMs, paused, advanceDay } = useGameStore();
+  const { activeTab, dayIntervalMs, paused, theme, advanceDay } = useGameStore();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -50,6 +50,11 @@ function App() {
         return <MarketView />;
     }
   };
+
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   return (
     <div className="app">
