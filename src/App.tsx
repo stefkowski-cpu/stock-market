@@ -12,28 +12,27 @@ import TradeModal from './components/TradeModal';
 import AchievementPopup from './components/AchievementPopup';
 
 function App() {
-  const { activeTab, gameSpeed, advanceDay } = useGameStore();
+  const { activeTab, dayIntervalMs, paused, advanceDay } = useGameStore();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Auto-advance days based on game speed
   useEffect(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
 
-    const baseInterval = 5000; // 5 seconds per day at 1x
-    const interval = baseInterval / gameSpeed;
-
-    intervalRef.current = setInterval(() => {
-      advanceDay();
-    }, interval);
+    if (!paused) {
+      intervalRef.current = setInterval(() => {
+        advanceDay();
+      }, dayIntervalMs);
+    }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [gameSpeed, advanceDay]);
+  }, [dayIntervalMs, paused, advanceDay]);
 
   const renderTab = () => {
     switch (activeTab) {

@@ -109,7 +109,8 @@ export interface GameState {
   xp: number;
   dayCount: number;
   totalProfitLoss: number;
-  gameSpeed: number; // 1 = normal, 2 = fast, 4 = ultra
+  dayIntervalMs: number; // milliseconds per game day (5000 = 5s, up to 3600000 = 1h)
+  paused: boolean;
   lastTickTime: number;
   marketOpen: boolean;
   marketSentiment: number; // -1 to 1

@@ -74,7 +74,9 @@ interface GameStore extends GameState {
   executeTrade: (companyId: string, shares: number, type: 'buy' | 'sell') => boolean;
   advanceDay: () => void;
   markNewsRead: (id: string) => void;
-  setGameSpeed: (speed: number) => void;
+  setDayInterval: (ms: number) => void;
+  setPaused: (paused: boolean) => void;
+  togglePaused: () => void;
   clearNewAchievement: () => void;
   resetGame: () => void;
   getPortfolioValue: () => number;
@@ -98,7 +100,8 @@ export const useGameStore = create<GameStore>()(
       xp: 0,
       dayCount: 0,
       totalProfitLoss: 0,
-      gameSpeed: 1,
+      dayIntervalMs: 5000,
+      paused: false,
       lastTickTime: Date.now(),
       marketOpen: true,
       marketSentiment: 0,
@@ -114,7 +117,9 @@ export const useGameStore = create<GameStore>()(
       closeTradeModal: () => set({ showTradeModal: false }),
       clearNewAchievement: () => set({ newAchievement: null }),
 
-      setGameSpeed: (speed) => set({ gameSpeed: speed }),
+      setDayInterval: (ms) => set({ dayIntervalMs: ms }),
+      setPaused: (paused) => set({ paused }),
+      togglePaused: () => set((state) => ({ paused: !state.paused })),
 
       executeTrade: (companyId, shares, type) => {
         const state = get();
@@ -273,7 +278,8 @@ export const useGameStore = create<GameStore>()(
           xp: 0,
           dayCount: 0,
           totalProfitLoss: 0,
-          gameSpeed: 1,
+          dayIntervalMs: 5000,
+          paused: false,
           lastTickTime: Date.now(),
           marketOpen: true,
           marketSentiment: 0,

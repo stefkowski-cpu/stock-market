@@ -86,28 +86,56 @@ body {
   gap: 8px;
 }
 
-.speed-controls {
-  display: flex;
-  gap: 2px;
-  background: var(--bg-card);
+.pause-btn {
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
-  padding: 2px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, background 0.2s;
 }
 
-.speed-btn {
-  background: none;
-  border: none;
+.pause-btn:active {
+  transform: scale(0.9);
+}
+
+.pause-btn.is-playing {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+
+.pause-btn.is-paused {
+  background: var(--positive);
+  color: #fff;
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 8px 3px rgba(34, 197, 94, 0.25); }
+}
+
+.speed-indicator-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 5px 10px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: border-color 0.2s;
+  white-space: nowrap;
 }
 
-.speed-btn.active {
-  background: var(--accent-primary);
-  color: #fff;
+.speed-indicator-btn:hover,
+.speed-indicator-btn:active {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
 }
 
 .advance-btn {
@@ -116,7 +144,7 @@ body {
   color: #fff;
   font-size: 12px;
   font-weight: 600;
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.1s;
@@ -124,6 +152,122 @@ body {
 
 .advance-btn:active {
   transform: scale(0.95);
+}
+
+/* Speed Panel (dropdown) */
+.speed-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 8px;
+  animation: fadeIn 0.15s ease;
+}
+
+.speed-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.speed-panel-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.speed-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.speed-label-left,
+.speed-label-right {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.speed-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  outline: none;
+}
+
+.speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--accent-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
+}
+
+.speed-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: none;
+}
+
+.speed-current {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.speed-current strong {
+  color: var(--accent-secondary);
+}
+
+.speed-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.speed-preset-btn {
+  flex: 1;
+  min-width: 40px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.speed-preset-btn.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+}
+
+.speed-preset-btn:hover:not(.active) {
+  border-color: var(--accent-primary);
 }
 
 .header-stats {
@@ -561,6 +705,42 @@ body {
   font-size: 13px;
   font-weight: 600;
   flex-shrink: 0;
+}
+
+/* ========== PORTFOLIO CHARTS ========== */
+.portfolio-chart {
+  padding-bottom: 8px;
+}
+
+.pie-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  justify-content: center;
+  padding: 4px 8px 0;
+}
+
+.pie-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.pie-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.pie-legend-name {
+  color: var(--text-secondary);
+}
+
+.pie-legend-pct {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* ========== NEWS VIEW ========== */
