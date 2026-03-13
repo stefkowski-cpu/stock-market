@@ -122,6 +122,59 @@ const ProfileView: React.FC = () => {
         </div>
       </div>
 
+      <h3 className="section-title">Anleitung</h3>
+      <div className="guide-section">
+        <div className="guide-card">
+          <span className="guide-icon">💰</span>
+          <div className="guide-text">
+            <span className="guide-title">Startkapital</span>
+            <span className="guide-desc">Du startest mit 50.000 €. Kaufe und verkaufe Aktien, um dein Vermögen zu vermehren.</span>
+          </div>
+        </div>
+        <div className="guide-card">
+          <span className="guide-icon">📈</span>
+          <div className="guide-text">
+            <span className="guide-title">Markt</span>
+            <span className="guide-desc">Durchsuche 100 echte Unternehmen aus 10 Branchen. Sortiere nach Name, Preis, Änderung oder Branche.</span>
+          </div>
+        </div>
+        <div className="guide-card">
+          <span className="guide-icon">📰</span>
+          <div className="guide-text">
+            <span className="guide-title">Nachrichten</span>
+            <span className="guide-desc">Nachrichten beeinflussen die Kurse. Klicke auf Branchen- oder Unternehmens-Tags, um direkt dorthin zu springen.</span>
+          </div>
+        </div>
+        <div className="guide-card">
+          <span className="guide-icon">📊</span>
+          <div className="guide-text">
+            <span className="guide-title">Statistik</span>
+            <span className="guide-desc">Analysiere Kurscharts, Kennzahlen und Unternehmensnews. Vergleiche bis zu 10 Aktien gleichzeitig.</span>
+          </div>
+        </div>
+        <div className="guide-card">
+          <span className="guide-icon">💼</span>
+          <div className="guide-text">
+            <span className="guide-title">Depot</span>
+            <span className="guide-desc">Verfolge dein Portfolio mit Gewinn/Verlust-Anzeige und Allokations-Diagramm. Klicke auf eine Position für die Detailansicht.</span>
+          </div>
+        </div>
+        <div className="guide-card">
+          <span className="guide-icon">⏱️</span>
+          <div className="guide-text">
+            <span className="guide-title">Spielgeschwindigkeit</span>
+            <span className="guide-desc">Stelle die Tagesdauer ein (5s bis 1h), pausiere jederzeit oder klicke ▶▶ für den nächsten Tag.</span>
+          </div>
+        </div>
+        <div className="guide-card">
+          <span className="guide-icon">⭐</span>
+          <div className="guide-text">
+            <span className="guide-title">Level & Erfolge</span>
+            <span className="guide-desc">Jeder Trade bringt XP. Steige im Level auf und schalte Erfolge frei – vom Anfänger zur Börsen-Legende!</span>
+          </div>
+        </div>
+      </div>
+
       <h3 className="section-title">
         Erfolge ({unlockedCount}/{totalAchievements})
       </h3>

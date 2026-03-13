@@ -80,6 +80,7 @@ export interface NewsItem {
   headline: string;
   content: string;
   timestamp: number;
+  dayNumber: number;
   impact: number; // -1 to 1
   affectedIndustries: Industry[];
   affectedCompanies: string[]; // company IDs

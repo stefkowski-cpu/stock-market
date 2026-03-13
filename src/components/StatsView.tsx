@@ -15,7 +15,7 @@ import {
 } from 'recharts';
 import { useGameStore } from '../store/gameStore';
 import { companies, getCompanyById } from '../data/companies';
-import { INDUSTRY_NAMES, INDUSTRY_COLORS } from '../types';
+import { INDUSTRY_NAMES, INDUSTRY_COLORS, Industry } from '../types';
 import StockLogo from './StockLogo';
 
 type TimeRange = '7d' | '30d' | '90d' | 'all';
@@ -34,6 +34,11 @@ const StatsView: React.FC = () => {
     getStockChange,
     portfolio,
     openTradeModal,
+    news,
+    markNewsRead,
+    setActiveTab,
+    setMarketFilter,
+    setMarketSort,
   } = useGameStore();
   const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -432,6 +437,109 @@ const StatsView: React.FC = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      {/* Company News */}
+      {(() => {
+        const companyNews = news
+          .filter((n) => n.affectedCompanies.includes(company.id))
+          .reverse()
+          .slice(0, 20);
+        if (companyNews.length === 0) return null;
+
+        const getCategoryColor = (cat: string) => {
+          switch (cat) {
+            case 'global': return '#4A90D9';
+            case 'industry': return '#F5A623';
+            case 'company': return '#7ED321';
+            default: return '#999';
+          }
+        };
+        const getCategoryLabel = (cat: string) => {
+          switch (cat) {
+            case 'global': return 'Weltweit';
+            case 'industry': return 'Branche';
+            case 'company': return 'Unternehmen';
+            default: return cat;
+          }
+        };
+
+        const handleIndustryClick = (e: React.MouseEvent, ind: Industry) => {
+          e.stopPropagation();
+          setMarketFilter(ind);
+          setMarketSort('industry');
+          setActiveTab('market');
+        };
+
+        const handleCompanyTagClick = (e: React.MouseEvent, compId: string) => {
+          e.stopPropagation();
+          if (compId !== company.id) {
+            selectStock(compId);
+          }
+        };
+
+        return (
+          <>
+            <h3 className="section-title">Nachrichten zu {company.ticker}</h3>
+            <div className="detail-news-list">
+              {companyNews.map((item) => (
+                <div
+                  key={item.id}
+                  className={`news-card ${item.read ? 'read' : 'unread'}`}
+                  onClick={() => markNewsRead(item.id)}
+                >
+                  <div className="news-header">
+                    <div className="news-header-left">
+                      {item.dayNumber != null && (
+                        <span className="news-day">Tag {item.dayNumber}</span>
+                      )}
+                      <span
+                        className="news-category"
+                        style={{ background: getCategoryColor(item.category) }}
+                      >
+                        {getCategoryLabel(item.category)}
+                      </span>
+                    </div>
+                    <span
+                      className={`news-impact ${item.impact > 0 ? 'positive' : item.impact < 0 ? 'negative' : ''}`}
+                    >
+                      {item.impact > 0 ? '▲' : item.impact < 0 ? '▼' : '—'}
+                      {' '}
+                      {Math.abs(item.impact) > 0.5 ? 'Stark' : Math.abs(item.impact) > 0.25 ? 'Mittel' : 'Leicht'}
+                    </span>
+                  </div>
+                  <h4 className="news-headline">{item.headline}</h4>
+                  <p className="news-content">{item.content}</p>
+                  <div className="news-tags">
+                    {item.affectedIndustries.map((ind) => (
+                      <span
+                        key={ind}
+                        className="news-tag news-tag-clickable"
+                        style={{ borderColor: INDUSTRY_COLORS[ind], color: INDUSTRY_COLORS[ind] }}
+                        onClick={(e) => handleIndustryClick(e, ind)}
+                      >
+                        {INDUSTRY_NAMES[ind]}
+                      </span>
+                    ))}
+                    {item.affectedCompanies.map((compId) => {
+                      const c = getCompanyById(compId);
+                      if (!c) return null;
+                      return (
+                        <span
+                          key={compId}
+                          className={`news-tag company-tag ${compId !== company.id ? 'news-tag-clickable' : ''}`}
+                          onClick={(e) => handleCompanyTagClick(e, compId)}
+                        >
+                          {c.ticker}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        );
+      })()}
 
       {stats && (
         <div className="stats-grid">

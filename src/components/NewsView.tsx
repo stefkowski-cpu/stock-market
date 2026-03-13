@@ -69,12 +69,17 @@ const NewsView: React.FC = () => {
             onClick={() => markNewsRead(item.id)}
           >
             <div className="news-header">
-              <span
-                className="news-category"
-                style={{ background: getCategoryColor(item.category) }}
-              >
-                {getCategoryLabel(item.category)}
-              </span>
+              <div className="news-header-left">
+                {item.dayNumber != null && (
+                  <span className="news-day">Tag {item.dayNumber}</span>
+                )}
+                <span
+                  className="news-category"
+                  style={{ background: getCategoryColor(item.category) }}
+                >
+                  {getCategoryLabel(item.category)}
+                </span>
+              </div>
               <span
                 className={`news-impact ${item.impact > 0 ? 'positive' : item.impact < 0 ? 'negative' : ''}`}
               >
