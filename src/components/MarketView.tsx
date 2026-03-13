@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { companies } from '../data/companies';
 import { Industry, INDUSTRY_NAMES, INDUSTRY_COLORS } from '../types';
@@ -10,9 +10,11 @@ const allIndustries: Industry[] = [
 ];
 
 const MarketView: React.FC = () => {
-  const { currentPrices, getStockChange, selectStock, setActiveTab } = useGameStore();
-  const [filterIndustry, setFilterIndustry] = useState<Industry | 'all'>('all');
-  const [sortBy, setSortBy] = useState<'name' | 'price' | 'change' | 'industry'>('name');
+  const {
+    currentPrices, getStockChange, selectStock, setActiveTab,
+    marketFilterIndustry: filterIndustry, setMarketFilter: setFilterIndustry,
+    marketSortBy: sortBy, setMarketSort: setSortBy,
+  } = useGameStore();
 
   const filteredCompanies = companies
     .filter((c) => filterIndustry === 'all' || c.industry === filterIndustry)

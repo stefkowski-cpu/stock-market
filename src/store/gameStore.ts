@@ -66,10 +66,14 @@ interface GameStore extends GameState {
   showTradeModal: boolean;
   tradeType: 'buy' | 'sell';
   newAchievement: Achievement | null;
+  marketFilterIndustry: Industry | 'all';
+  marketSortBy: 'name' | 'price' | 'change' | 'industry';
 
   // Actions
   setActiveTab: (tab: Tab) => void;
   selectStock: (id: string | null) => void;
+  setMarketFilter: (industry: Industry | 'all') => void;
+  setMarketSort: (sort: 'name' | 'price' | 'change' | 'industry') => void;
   openTradeModal: (type: 'buy' | 'sell') => void;
   closeTradeModal: () => void;
   executeTrade: (companyId: string, shares: number, type: 'buy' | 'sell') => boolean;
@@ -113,9 +117,13 @@ export const useGameStore = create<GameStore>()(
       showTradeModal: false,
       tradeType: 'buy',
       newAchievement: null,
+      marketFilterIndustry: 'all',
+      marketSortBy: 'name',
 
       setActiveTab: (tab) => set({ activeTab: tab }),
       selectStock: (id) => set({ selectedStock: id }),
+      setMarketFilter: (industry) => set({ marketFilterIndustry: industry }),
+      setMarketSort: (sort) => set({ marketSortBy: sort }),
       openTradeModal: (type) => set({ showTradeModal: true, tradeType: type }),
       closeTradeModal: () => set({ showTradeModal: false }),
       clearNewAchievement: () => set({ newAchievement: null }),
@@ -293,6 +301,8 @@ export const useGameStore = create<GameStore>()(
           selectedStock: null,
           showTradeModal: false,
           newAchievement: null,
+          marketFilterIndustry: 'all',
+          marketSortBy: 'name',
         });
       },
 

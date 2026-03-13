@@ -1,10 +1,17 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
-import { INDUSTRY_NAMES, INDUSTRY_COLORS } from '../types';
+import { Industry, INDUSTRY_NAMES, INDUSTRY_COLORS } from '../types';
 import { getCompanyById } from '../data/companies';
 
 const NewsView: React.FC = () => {
-  const { news, markNewsRead } = useGameStore();
+  const {
+    news,
+    markNewsRead,
+    selectStock,
+    setActiveTab,
+    setMarketFilter,
+    setMarketSort,
+  } = useGameStore();
   const sortedNews = [...news].reverse();
 
   const getCategoryLabel = (category: string) => {
@@ -25,6 +32,19 @@ const NewsView: React.FC = () => {
       case 'market': return '#D0021B';
       default: return '#999';
     }
+  };
+
+  const handleCompanyClick = (e: React.MouseEvent, companyId: string) => {
+    e.stopPropagation();
+    selectStock(companyId);
+    setActiveTab('stats');
+  };
+
+  const handleIndustryClick = (e: React.MouseEvent, industry: Industry) => {
+    e.stopPropagation();
+    setMarketFilter(industry);
+    setMarketSort('industry');
+    setActiveTab('market');
   };
 
   if (sortedNews.length === 0) {
@@ -73,8 +93,9 @@ const NewsView: React.FC = () => {
               {item.affectedIndustries.map((ind) => (
                 <span
                   key={ind}
-                  className="news-tag"
+                  className="news-tag news-tag-clickable"
                   style={{ borderColor: INDUSTRY_COLORS[ind], color: INDUSTRY_COLORS[ind] }}
+                  onClick={(e) => handleIndustryClick(e, ind)}
                 >
                   {INDUSTRY_NAMES[ind]}
                 </span>
@@ -83,7 +104,11 @@ const NewsView: React.FC = () => {
                 const company = getCompanyById(compId);
                 if (!company) return null;
                 return (
-                  <span key={compId} className="news-tag company-tag">
+                  <span
+                    key={compId}
+                    className="news-tag company-tag news-tag-clickable"
+                    onClick={(e) => handleCompanyClick(e, compId)}
+                  >
                     {company.ticker}
                   </span>
                 );

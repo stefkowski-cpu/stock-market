@@ -860,6 +860,16 @@ body {
   color: var(--accent-primary);
 }
 
+.news-tag-clickable {
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.15s;
+}
+
+.news-tag-clickable:active {
+  transform: scale(0.92);
+  opacity: 0.8;
+}
+
 /* ========== STATS VIEW ========== */
 .stock-grid {
   display: grid;
