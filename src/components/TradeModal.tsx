@@ -15,9 +15,10 @@ const TradeModal: React.FC = () => {
     executeTrade,
   } = useGameStore();
 
-  const [shares, setShares] = useState(1);
+  const [sharesInput, setSharesInput] = useState('1');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const shares = parseInt(sharesInput) || 0;
 
   if (!showTradeModal || !selectedStock) return null;
 
@@ -57,7 +58,7 @@ const TradeModal: React.FC = () => {
       setSuccess(true);
       setTimeout(() => {
         closeTradeModal();
-        setShares(1);
+        setSharesInput('1');
         setSuccess(false);
       }, 800);
     } else {
@@ -65,9 +66,46 @@ const TradeModal: React.FC = () => {
     }
   };
 
-  const handleMax = () => {
-    setShares(tradeType === 'buy' ? maxBuyShares : maxSellShares);
+  const maxShares = tradeType === 'buy' ? maxBuyShares : maxSellShares;
+
+  const setShares = (n: number) => {
+    const clamped = Math.max(0, Math.min(n, maxShares));
+    setSharesInput(String(clamped));
   };
+
+  const handleMax = () => {
+    setShares(maxShares);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    // Allow empty field so user can clear and retype
+    if (raw === '') {
+      setSharesInput('');
+      return;
+    }
+    // Only digits
+    const cleaned = raw.replace(/\D/g, '');
+    if (cleaned === '') {
+      setSharesInput('');
+      return;
+    }
+    const num = Math.min(parseInt(cleaned), maxShares);
+    setSharesInput(String(num));
+  };
+
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.target.select();
+  };
+
+  const handleInputBlur = () => {
+    // If empty or 0 on blur, reset to 1
+    if (!sharesInput || parseInt(sharesInput) <= 0) {
+      setSharesInput('1');
+    }
+  };
+
+  const sliderValue = maxShares > 0 ? (shares / maxShares) * 100 : 0;
 
   return (
     <div className="modal-overlay" onClick={closeTradeModal}>
@@ -100,19 +138,38 @@ const TradeModal: React.FC = () => {
         <div className="shares-input-group">
           <label>Anzahl Aktien</label>
           <div className="shares-controls">
-            <button onClick={() => setShares(Math.max(1, shares - 1))}>−</button>
+            <button onClick={() => setShares(shares - 1)}>−</button>
             <input
-              type="number"
-              value={shares}
-              onChange={(e) => setShares(Math.max(1, parseInt(e.target.value) || 1))}
-              min={1}
-              max={tradeType === 'buy' ? maxBuyShares : maxSellShares}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={sharesInput}
+              onChange={handleInputChange}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
             />
             <button onClick={() => setShares(shares + 1)}>+</button>
             <button className="max-btn" onClick={handleMax}>
               MAX
             </button>
           </div>
+          {maxShares > 1 && (
+            <div className="shares-slider-row">
+              <input
+                type="range"
+                min={0}
+                max={maxShares}
+                step={1}
+                value={shares}
+                onChange={(e) => setShares(Number(e.target.value))}
+                className="shares-slider"
+              />
+              <div className="shares-slider-labels">
+                <span>0</span>
+                <span>{maxShares}</span>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="trade-summary">
