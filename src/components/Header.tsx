@@ -68,7 +68,7 @@ const Header: React.FC = () => {
     <header className="app-header">
       <div className="header-top">
         <div className="header-brand">
-          <h1>BörsenGame</h1>
+          <h1>VirtualBörse</h1>
           <span className="day-counter">Tag {dayCount}</span>
         </div>
         <div className="header-controls">

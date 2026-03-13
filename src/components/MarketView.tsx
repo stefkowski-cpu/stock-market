@@ -12,13 +12,17 @@ const allIndustries: Industry[] = [
 const MarketView: React.FC = () => {
   const { currentPrices, getStockChange, selectStock, setActiveTab } = useGameStore();
   const [filterIndustry, setFilterIndustry] = useState<Industry | 'all'>('all');
-  const [sortBy, setSortBy] = useState<'name' | 'price' | 'change'>('name');
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'change' | 'industry'>('name');
 
   const filteredCompanies = companies
     .filter((c) => filterIndustry === 'all' || c.industry === filterIndustry)
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       if (sortBy === 'price') return (currentPrices[b.id] || 0) - (currentPrices[a.id] || 0);
+      if (sortBy === 'industry') {
+        const cmp = INDUSTRY_NAMES[a.industry].localeCompare(INDUSTRY_NAMES[b.industry]);
+        return cmp !== 0 ? cmp : a.name.localeCompare(b.name);
+      }
       const changeA = getStockChange(a.id).percent;
       const changeB = getStockChange(b.id).percent;
       return changeB - changeA;
@@ -75,6 +79,12 @@ const MarketView: React.FC = () => {
             onClick={() => setSortBy('change')}
           >
             Änderung
+          </button>
+          <button
+            className={`sort-btn ${sortBy === 'industry' ? 'active' : ''}`}
+            onClick={() => setSortBy('industry')}
+          >
+            Branche
           </button>
         </div>
       </div>
